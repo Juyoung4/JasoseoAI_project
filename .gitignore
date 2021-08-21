@@ -1,2 +1,4 @@
 #jupyter checkpoint directory
 .ipynb_checkpoints
+# DB_STORE
+.DS_Store
