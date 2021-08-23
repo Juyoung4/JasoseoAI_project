@@ -9,9 +9,22 @@ app = Flask(__name__)
 def index():
     return render_template('index.html', title='HOME PAGE')
 
-@app.route('/board')
+@app.route('/board', methods = ['GET', 'POST'])
 def board():
-    return render_template('board.html')
+    if request.method=='POST':
+        title=request.form["title"]
+        company=request.form.get("company")
+        print(company)
+    return render_template('board.html', title=title, company=company)
+
+@app.route('/boardList')
+def boardList():
+    posts=['대한통운_1','삼성_1','lg_1']
+    return render_template('boardList.html', posts=posts)
+
+@app.route('/writeSetting', methods = ['GET', 'POST'])
+def writeSetting():
+    return render_template('writeSetting.html')
 
 @app.route('/keywords')
 def keywords():
@@ -44,7 +57,7 @@ def write():
         # [3] 두번째 모델에 전달
     return jsonify(state_check = "success", result= data)
 
-
+    
 if __name__ == '__main__':
     app.debug = True
     app.run(port=8000)

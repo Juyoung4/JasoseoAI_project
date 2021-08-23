@@ -12,14 +12,28 @@ CREATE TABLE users (
     create_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-/* POST 생성
-=> ID, 사용자_ID, 생성일, 제목, 내용
+/* 자소서 생성
+=> ID, 사용자_ID, 자소서제목, 회사명, 생성일
 */
-CREATE TABLE posts (
+CREATE TABLE clusters (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     writer_id INTEGER NOT NULL, /*users의 id 필요 - foreign key*/
-    title varchar(30) NOT NULL,
-    content varchar(800) NOT NULL,
+    title varchar(150) NOT NULL,
+    company varchar(50) NOT NULL,
     create_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_id) REFERENCES users (id) /*외부 키 */
+    FOREIGN KEY (writer_id) REFERENCES users (id)
+);
+
+/* 한 자소서에 대한 질문-내용 생성
+=> ID, 사용자_ID, 자소서질문, 자소서내용, 생성일, 클러스터id
+*/
+CREATE TABLE jasosuls (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    writer_id INTEGER NOT NULL, /*users의 id 필요 - foreign key*/
+    cluster_id INTEGER NOT NULL, /*clusters의 id 필요 - foreign key*/
+    question varchar(200) NOT NULL, /*자소서 질문*/
+    content varchar(1500) NOT NULL, /*자소서 내용*/
+    create_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (writer_id) REFERENCES users (id), /*외부 키 */
+    FOREIGN KEY (cluster_id) REFERENCES clusters (id) /*외부 키 */
 );

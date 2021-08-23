@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <br><br>
+      <h1>게시글 목록</h1> 
+      <br><br>
+      {% for post in posts %}
+      <article>
+        <hr>
+        <div class="row">
+          <div class="col">
+            <a class="h2" href="#">{{ post }}</a>
+        
+      </article>
+      {% endfor %}
+    </div>
+
+   <aside class="col-md-4 my-3">
+      <button type="button" onclick="location.href='writeSetting'">자소서 작성하기</button>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js></script>
+{% endblock %}

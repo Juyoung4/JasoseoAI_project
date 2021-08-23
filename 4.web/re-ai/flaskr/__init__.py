@@ -37,17 +37,19 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    # main 관련 등록
-    from . import main
-    app.register_blueprint(main.bp)
+    # index페이지-home 등록
+    @app.route("/")
+    def index():
+        username = session.get('username', None)
+        return render_template('index.html', username = username)
 
     # Blueprint "auth" 등록
     from . import auth
     app.register_blueprint(auth.bp)
 
-    # Blueprint "board" 등록
-    # from . import board
-    # app.register_blueprint(board.bp)
+    # Blueprint "jasosul" 등록
+    from . import jasosul
+    app.register_blueprint(jasosul.bp)
     
     return app
 
