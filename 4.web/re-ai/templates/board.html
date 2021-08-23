@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <form class="form-horizontal" method="post" action="/write">
+    <fieldset>
+        <!-- Form Name -->
+        <h2>자소서를 입력해주세요</h2>
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-12" for="txtTitle">Questions</label>
+            <div class="col-md-12">
+                <input id="txtTitle" name="question" type="text" placeholder="질문을 입력해주세요." class="form-control input-md", autofocus required><!--required : 공백입력시 경고-->
+            </div>
+        </div>
+        <!-- Textarea -->
+        <div class="form-group">
+            <label class="col-md-12" for="txtPost">Contents</label>
+            <div class="col-md-12">
+                <textarea class="form-control" id="txtPost" name="content" placeholder="질문에 맞는 내용을 입력해주세요." style="height:260px;" required></textarea>
+            </div>
+        </div>
+        <!-- Button 계속 질문 추가하기-->
+        <div class="form-group" style="display: inline-block">
+            <label class="col-md-12 control-label" for="continuebutton"></label>
+            <div class="col-md-12">
+                <input id="continuebutton" name="continuebutton" class="btn btn-primary" type="button" value="계속하기">
+            </div>
+        </div>
+        <!-- Button 2 작성 완료하기 -->
+        <div class="form-group" style="display: inline-block">
+          <label class="col-md-12 control-label" for="finishbutton"></label>
+          <div class="col-md-12">
+              <input id="finishbutton" name="finishbutton" class="btn btn-dark" type="submit" value="작성 완료하기">
+        </div>
+      </div>
+    </fieldset>
+</form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js></script>
+
+  <script>
+    $('#continuebutton').click(function(){
+        var question = $('#txtTitle').val();
+        var content = $('#txtPost').val();
+        var state = 1;
+
+        var postdata = {
+            'question':question, 'content':content, 'state':state
+        }
+        $.ajax({
+            type: 'POST',
+            url: '{{url_for("write")}}',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                alert('성공! 데이터 값:' + data.result['question']+" " + data.result['content']+ " " + data.result['state'])
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    })
+</script>
+{% endblock %}
