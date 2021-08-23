@@ -14,6 +14,7 @@ def get_db():
         )
 
         # sqlite3.Row => 쿼리를 실행했을 때 결과를 딕셔너리 형태로 돌려준다
+        # 
         g.db.row_factory = sqlite3.Row
     return g.db
 

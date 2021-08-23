@@ -53,7 +53,7 @@ def login():
                 session['username'] = username
                 return redirect(url_for('index'))
             else:
-                error = 'Incorrect password'
+                error = logins(username, passwd)#'Incorrect password'
         flash(error)
     return render_template('login.html')
 

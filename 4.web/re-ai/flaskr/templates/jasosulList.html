@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <br><br>
+      <h1>게시글 목록</h1> 
+      <br><br>
+      <script type="text/javascript">
+        alert("{{'company_imgs/'+jasosuls[0].company+'.png'}}");
+      </script>
+      {% for jaso in jasosuls %}
+      <article>
+        <hr>
+        <div class="row">
+          <div class="col">
+            <a class="h2" href="{{ url_for('jasosul.jasoContent')}}">{{ jaso.title }}</a>
+            <p class="text-justify">작성자 : {{ username }}</p>
+            <small class="text-muted">{{ jaso.create_at }}</small>
+          </div>
+
+          <div class="col-md-2 d-flex flex-column">
+            <img class="box mx-auto" src="{{ url_for('static', filename='company_imgs/'+jaso.company+'.png')}}" data-src="holder.js/64x64" width="75px" height="64px">
+            <p class="text-muted text-center">{{ jaso.company }}</p>
+          </div>
+      </article>
+      {% endfor %}
+    </div>
+
+   <aside class="col-md-4 my-3">
+      <button type="button" onclick="location.href='#'">자소서 작성하기</button> 
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js></script>
+{% endblock %}
