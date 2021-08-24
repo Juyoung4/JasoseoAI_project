@@ -8,9 +8,9 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 def insert_db(query, args=()):
-    db.get_db().execute(query, args)
+    cur = db.get_db().execute(query, args)
     db.get_db().commit() # insert는 commit() 꼭!
-    return True
+    return cur.lastrowid
 
 def registers(username, passwd = None):
     if query_db("SELECT id FROM users WHERE username = ?", [username], one=True) is None: # 중복 검사
@@ -29,14 +29,10 @@ def logins(username, passwd):
 def userCheck(username):
     return query_db("SELECT id FROM users WHERE username = ?", [username], one=True)
 
-def make_dicts(cursor, row):
-    return dict((cursor.description[idx][0], value)
-                for idx, value in enumerate(row))
-
 def jasoListGet(userId):
     jasoLists = []
 
-    for jaso in query_db("SELECT title, company, create_at FROM clusters WHERE writer_id = ?", [userId]):
+    for jaso in query_db("SELECT title, company, create_at FROM clusters WHERE writer_id = ? ORDER BY create_at", [userId]):
         jasoLists.append({
             'title' : jaso['title'],
             'company' : jaso['company'],
@@ -44,3 +40,8 @@ def jasoListGet(userId):
         })
 
     return jasoLists if jasoLists else None
+
+
+def jasoClusterCreate(userId, title, create_at):
+    return insert_db("INSERT INTO clusters (writer_id, title, company) values (?, ?, ?)", \
+        [userId, title, create_at])

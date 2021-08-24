@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<br><br><br><br><br><br>
+<div class="row">
+    <div class="container">
+        <form class="form-horizontal" method="post" action="{{ url_for('jasosul.ClusterCreate') }}">
+                <div class="card align-middle" style="width:100%; border-radius:20px;">
+                    <div class="card-title" style="margin-top:50px;">
+                        <h2 class="card-title text-center" style="color:#113366;"><b>회사 검색</b></h2>
+                    </div>         
+                    <div class="card-body">
+                        <h5>😀 회사를 검색해주세요 </h5>
+                        <input type="text" id="searchCompany" name="searchCompany" style="display: inline-block" class="form-control" placeholder="회사 명" required autofocus> 
+                            <div class="col-md-12">
+                                <input id="searchButton" name="searchButton" class="btn btn-primary" type="submit" value="검색">
+                            </div>
+                            <br>
+                            <h5>😀 회사를 선택해주세요 </h5>
+                            <select class="form-control" id = "companyList" name="companyList">
+                            </select>
+                    </div>
+                </div>
+                <br><br>
+                <div class="card align-middle" style="width:100%; border-radius:20px;">
+                    <div class="card-title" style="margin-top:50px;">
+                        <h2 class="card-title text-center" style="color:#661118;"><b>자소서 제목을 입력해주세요</b></h2>
+                    </div>
+                    
+                    <div class="card-body">
+                        <input type="text" name="jasoTitle" class="form-control" placeholder="자소설 제목" required autofocus><br>
+                    </div>
+                </div>
+            <br><br>
+            <button class="btn btn-sucess btn-block" type="submit">자소서 쓰러가기</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src=https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js></script>
+
+  <script>
+    $('#searchButton').click(function(){
+        var searchCompany = $('#searchCompany').val();
+
+        var postdata = {
+            'searchCompany':searchCompany
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '{{url_for("jasosul.CompanySearch")}}',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                //alert('성공! 데이터 값:' + data.Candidates)
+                var Candidates = data.Candidates;
+                var str = "";
+                $.each(Candidates, function(i){
+                    str += "<option value="+Candidates[i]+">"+Candidates[i]+"</option>"
+                });
+                $("#companyList").append(str);
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    })
+</script>
+{% endblock %}

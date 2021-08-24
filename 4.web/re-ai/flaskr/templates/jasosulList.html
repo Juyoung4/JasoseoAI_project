@@ -7,9 +7,7 @@
       <br><br>
       <h1>게시글 목록</h1> 
       <br><br>
-      <script type="text/javascript">
-        alert("{{'company_imgs/'+jasosuls[0].company+'.png'}}");
-      </script>
+      
       {% for jaso in jasosuls %}
       <article>
         <hr>
@@ -28,8 +26,8 @@
       {% endfor %}
     </div>
 
-   <aside class="col-md-4 my-3">
-      <button type="button" onclick="location.href='#'">자소서 작성하기</button> 
+    <aside class="col-md-4 my-3">
+      <button type="button" onclick="location.href='{{ url_for('jasosul.writeSetting')}}'">자소서 작성하기</button> 
     </aside>
   </div>
 </div>

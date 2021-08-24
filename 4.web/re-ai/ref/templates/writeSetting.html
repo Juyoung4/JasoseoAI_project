@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<form action="/board" method="POST">
+    <div class="container">
+        <div class="row">
+             <div class="col-md-8">
+              <br><br>
+                 <h1>회사를 선택해주세요 </h1>
+                      회사: 
+                        <select name="company" size="1">
+                            <option value="삼성">삼성</option>
+                            <option value="lg">lg</option>
+                            <option value="현대">현대</option>
+                            <option value="기아">기아</option>
+                            <option value="한화">한화</option>
+                        </select>
+                        
+                         <br><br>
+                  <h1>자소서 제목을 입력하세요</h1>
+                         <input type="text" name="title" required>   </input>
+            </div>
+
+            <aside class="col-md-4 my-3">
+                <input type="submit" value="자소서 쓰러가기"></input>
+            </aside>
+      </div>
+    </div>
+</form>
+{% endblock %}
