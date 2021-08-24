@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <br><br>
+    <h1 align="center"> <strong>{{title}}</strong></h1>
+    <div style="float:right;">작성자 : {{username}}</div>
+    <br>
+    <hr width = "100%" style="border: solid 2px"><br>
+
+    <!-- 내용 보여주기 -->
+    <div class="col-md-12">
+        {% for content in allContents %}
+            <h3>{{content.idx}}. {{content.question}}</h3>
+            <p>{{content.content}}</p>
+
+            <div>
+                <span class="badge">Posted {{content.create_at}}</span>    
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+{% endblock %}

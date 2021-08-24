@@ -20,6 +20,9 @@ with open('C:/Users/msi/GitHub/JasoseoAI_project/4.web/re-ai/flaskr/Company/Comp
 def jasoList():
     # [1] username 가져오기 + user_id 가져오기
     username = session.get('username')
+    user_id = userCheck(username)
+    if not user_id:
+        return redirect(url_for('index'))
     user_id = userCheck(username)['id']
     
     # [2] 해당 user인 cluster 가져오기
@@ -31,8 +34,25 @@ def jasoList():
 # result 부분
 @bp.route("/jasoContent", methods = ['GET'])
 def jasoContent():
+    # [1] get 가져오기
+    username = request.args.get('username')
+    ClusterId = request.args.get('ClusterId')
+    title = request.args.get('title')
 
-    return render_template()
+    user_id = userCheck(username)['id']
+    current_app.logger.warning(username + " "+str(ClusterId) + title)
+
+    # [2] 내용 가져오기
+    allContents = jasoContentsLoad(user_id, ClusterId)
+
+    # current_app.logger.warning(str(allContents[0]['idx']) + " " + \
+    #     str(allContents[0]['Contentid']) + " " + \
+    #         allContents[0]['question'] + " " +\
+    #             allContents[0]['content'] + " ")
+
+    return render_template("jasoResult.html", \
+        username = username, ClusterId=ClusterId, title=title, \
+            allContents = allContents)
 
 @bp.route("/writeSetting", methods = ['GET'])
 def writeSetting():
@@ -68,8 +88,8 @@ def ClusterCreate():
         title=request.form.get("jasoTitle")
         company=request.form.get("companyList")
 
-        current_app.logger.warning(company)
-        current_app.logger.warning(title)
+        # current_app.logger.warning(company)
+        # current_app.logger.warning(title)
 
         cluster_id = jasoClusterCreate(user_id, title, company)
 
@@ -111,13 +131,13 @@ def jasoAwkFind():
 
     return jsonify(awkResults = awkResults)
 
-@bp.route("/jasoWrite", methods = ['GET', 'POST'])
+@bp.route("/jasoWrite", methods = ['POST'])
 def jasoWrite():
-
     if request.method == 'POST':
         data = request.get_json()
         username = session.get('username')
         user_id = userCheck(username)['id']
+
         ClusterId = data['ClusterId']
         Question = data['question']
         Content = data['content']
@@ -128,10 +148,10 @@ def jasoWrite():
         if not user_id:
             return jsonify(status = False)
 
-        current_app.logger.warning(ClusterId)
+        current_app.logger.warning("##############" +str(ClusterId))
 
         result = jasoSave(user_id, ClusterId, Question, Content)
         if not result:
             return jsonify(status = False)
 
-    return jsonify(status = True) 
+    return jsonify(status = False) 

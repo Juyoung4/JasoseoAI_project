@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='HOME PAGE')
+    return render_template('temp3.html', title='HOME PAGE')
 
 @app.route('/board', methods = ['GET', 'POST'])
 def board():
