@@ -1,6 +1,8 @@
 /* schema.sql => 테이블 관련 파일 */
 
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS clusters;
+DROP TABLE IF EXISTS jasosuls;
 
 /*USER 생성
 ID, 사용자 이름, 비밀번호
@@ -21,7 +23,7 @@ CREATE TABLE clusters (
     title varchar(150) NOT NULL,
     company varchar(50) NOT NULL,
     create_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_id) REFERENCES users (id)
+    FOREIGN KEY (writer_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 /* 한 자소서에 대한 질문-내용 생성
@@ -34,6 +36,6 @@ CREATE TABLE jasosuls (
     question varchar(200) NOT NULL, /*자소서 질문*/
     content varchar(1500) NOT NULL, /*자소서 내용*/
     create_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (writer_id) REFERENCES users (id), /*외부 키 */
-    FOREIGN KEY (cluster_id) REFERENCES clusters (id) /*외부 키 */
+    FOREIGN KEY (writer_id) REFERENCES users (id) ON DELETE CASCADE, /*외부 키 */
+    FOREIGN KEY (cluster_id) REFERENCES clusters (id) ON DELETE CASCADE/*외부 키 */
 );

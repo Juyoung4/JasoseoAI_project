@@ -13,7 +13,7 @@ def insert_db(query, args=()):
     return cur.lastrowid
 
 def registers(username, passwd = None):
-    if query_db("SELECT id FROM users WHERE username = ?", [username], one=True) is None: # 중복 검사
+    if query_db("SELECT id FROM users WHERE username = ?", [username], one=True) != None: # 중복 검사
         return False
     else:
         return insert_db("INSERT INTO users (username, passwd) values (?, ?)", [username, passwd])
