@@ -1,0 +1,183 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">  
+    <br><br>
+    <h4>회사 : {{CompanyInfo.Name}}</h4>
+    <br>
+    <div class="row">
+        <div class="col-6">
+            <h4>회사 인재상</h4>
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">
+                {% for image in CompanyInfo.ImageQ %}
+                    <button type="button" class="btn btn-outline-success" style="display: inline-block">{{image}}</button>
+                {% endfor %}
+                </li>
+            </ul>
+        </div>
+        <div class="col-6">
+            <h4>회사 핵심가치</h4>
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">
+                {% for value in CompanyInfo.Cvalue %}
+                    <button type="button" class="btn btn-outline-primary" style="display: inline-block">{{value}}</button>
+                {% endfor %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr width = "100%"><br>
+    
+    <h2><strong>자소서를 입력해주세요</strong></h2>
+    <form class="form-horizontal" method="post" action="/write">
+        <fieldset>
+            <!-- <h5>자소서 제목: {{title}}</h5> -->
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-12" for="question">Questions</label>
+                <div class="col-md-12">
+                    <input id="question" name="question" type="text" placeholder="질문을 입력해주세요." class="form-control input-md", autofocus required><!--required : 공백입력시 경고-->
+                </div>
+            </div>
+            <!-- Textarea -->
+            <div class="form-group">
+                <label class="col-md-12" for="content">Contents</label>
+                <div class="col-md-12">
+                    <textarea class="form-control" id="content" name="content" placeholder="질문에 맞는 내용을 입력해주세요." style="height:260px;" required></textarea>
+                </div>
+            </div>
+
+            <!-- Button 1 작성 완료하기 -->
+            <div class="form-group" style="float: right;">
+                <label class="col-md-12 control-label" for="finishbutton"></label>
+                <div class="col-md-12">
+                    <input id="finishbutton" name="finishbutton" class="btn btn-dark" type="submit" value="작성 완료하기" onclick="location.href='{{ url_for('jasosul.jasoContent', ClusterId=ClusterId, title=title, username=username) }}'">
+                </div>
+            </div>
+
+            <!-- Button 2 계속 질문 추가하기-->
+            <div class="form-group" style="float: right;">
+                <label class="col-md-12 control-label" for="continuebutton"></label>
+                <div class="col-md-12">
+                    <input id="continuebutton" name="continuebutton" class="btn btn-info" type="button" value="계속하기" onclick="saveSubContent({{ClusterId}})">
+                </div>
+            </div>
+
+            <!-- Button 3 어색한 문장 찾기 -->
+            <div class="form-group" style="float: right;">
+                <label class="col-md-12 control-label" for="ackwardbutton"></label>
+                <div class="col-md-12">
+                    <input id="ackwardbutton" name="ackwardbutton" class="btn btn-danger" type="button" value="어색한 문장">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <div class="form-group">
+        <label class="col-md-12" for="DragPlace">선택한 문장(드래그해서 문장 선택) </label>
+        <input id="DragTEXT" name="DragTEXT" type="text" class="form-control input-md"></input>
+    
+        <!-- 문장 추천 Button -->
+        <label class="col-md-12 control-label" for="recommendbutton"></label>
+        <div class="col-md-12">
+            <button type="button" id="recommendbutton" name="recommendbutton" class="btn btn-warning" onclick="sendSentence()">문장추천</button>
+        </div>
+    </div>
+    <div id="list"></div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    function selectText() {
+        var selectionText = "";
+        if (document.getSelection) {
+            selectionText = document.getSelection();
+        } else if (document.selection) {
+            selectionText = document.selection.createRange().text;
+        }
+        return selectionText;
+    }
+   
+    document.onmouseup = function() {
+        document.getElementById("DragTEXT").value = selectText();
+    }
+</script>
+
+<script>
+    function sendSentence(){ //문장 보내기
+        var recommendText=$('#DragTEXT').val(); //입력문장
+
+        var postdata = {
+            'recommendText': recommendText
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '{{url_for("jasosul.jasoRecommend")}}',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                alert('성공! 데이터 값:' + data.recommendResults)
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    }
+
+    function sendContent(){ //문단 보내기
+        var content=$('#content').val(); //질문
+        
+        var postdata = {
+            'AwkContent':content
+        }
+        $.ajax({
+            type: 'POST',
+            url: '{{url_for("jasosul.jasoAwkFind")}}',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                alert('성공! 데이터 값:' + data.result['content'])
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    }
+
+    //중간 저장하기 + 최종 저장하기
+    function saveSubContent(ClusterId){
+        var question=$('#question').val(); //질문
+        var content=$('#content').val(); //문장
+
+        var postdata = {
+            'ClusterId' : ClusterId,
+            'question' : question,
+            'content' : content
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '{{url_for("jasosul.jasoWrite")}}',
+            data: JSON.stringify(postdata),
+            dataType : 'JSON',
+            contentType: "application/json",
+            success: function(data){
+                $('#question').val('');
+                $('#content').val('');
+                $('#DragTEXT').val('');
+            },
+            error: function(request, status, error){
+                alert('ajax 통신 실패')
+                alert(error);
+            }
+        })
+    }
+</script>
+{% endblock %}

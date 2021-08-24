@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    {% if username %}
+    <center>
+        <h1><img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px hspace=40">  {{username}}<a>님 안녕하세요!</a>  <img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px" hspace=40></h1>
+    </center>
+    {% else %}
+    <h1 class="logo">HOME 페이지</h1>
+    {% endif %}
+</div>
+{% endblock %}
