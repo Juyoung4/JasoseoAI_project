@@ -113,5 +113,24 @@ def jasoAwkFind():
 
 @bp.route("/jasoWrite", methods = ['GET', 'POST'])
 def jasoWrite():
-    
-    return 
+
+    if request.method == 'POST':
+        data = request.get_json()
+        username = session.get('username')
+        ClusterId = data['ClusterId']
+        Question = data['question']
+        Content = data['content']
+        
+        if not username or not ClusterId or not Question or not Content:
+            return jsonify(status = False)
+        user_id = userCheck(username)['id']
+        if not user_id:
+            return jsonify(status = False)
+
+        current_app.logger.warning(ClusterId)
+
+        result = jasoSave(username, ClusterId, Question, Content)
+        if not result:
+            return jsonify(status = False)
+
+    return jsonify(status = True) 

@@ -41,7 +41,10 @@ def jasoListGet(userId):
 
     return jasoLists if jasoLists else None
 
-
-def jasoClusterCreate(userId, title, create_at):
+def jasoClusterCreate(userId, title, company):
     return insert_db("INSERT INTO clusters (writer_id, title, company) values (?, ?, ?)", \
-        [userId, title, create_at])
+        [userId, title, company])
+
+def jasoSave(userId, clusterId, question, content):
+    return insert_db("INSERT INTO jasosuls (writer_id, cluster_id, question, content) values (?, ?, ?, ?)", \
+        [userId, clusterId, question, content])
