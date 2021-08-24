@@ -117,10 +117,11 @@ def jasoWrite():
     if request.method == 'POST':
         data = request.get_json()
         username = session.get('username')
+        user_id = userCheck(username)['id']
         ClusterId = data['ClusterId']
         Question = data['question']
         Content = data['content']
-        
+
         if not username or not ClusterId or not Question or not Content:
             return jsonify(status = False)
         user_id = userCheck(username)['id']
@@ -129,7 +130,7 @@ def jasoWrite():
 
         current_app.logger.warning(ClusterId)
 
-        result = jasoSave(username, ClusterId, Question, Content)
+        result = jasoSave(user_id, ClusterId, Question, Content)
         if not result:
             return jsonify(status = False)
 
