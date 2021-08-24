@@ -14,7 +14,7 @@ from difflib import SequenceMatcher
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
 
 with open('C:/Users/msi/GitHub/JasoseoAI_project/4.web/re-ai/flaskr/Company/CompanyInfo.json', 'r', encoding='utf-8') as f:
-    CompanyInfo = json.load(f)
+    CompanyInfos = json.load(f)
 
 @bp.route("/jasoList", methods = ['GET'])
 def jasoList():
@@ -43,7 +43,7 @@ def writeSetting():
 @bp.route("/CompanySearch", methods = ['POST'])
 def CompanySearch():
     username = session.get('username')
-    CompanyNames = list(CompanyInfo.keys())
+    CompanyNames = list(CompanyInfos.keys())
     Candidates = []
     
     if request.method == 'POST':
@@ -75,8 +75,43 @@ def ClusterCreate():
 
         current_app.logger.warning(cluster_id)
 
+        CompanyInfo = {
+            'Name' : company,
+            'ImageQ' : CompanyInfos[company][0],
+            'Cvalue' : CompanyInfos[company][1]
+        }
+        
     return render_template("jasoWrite.html", username=username, \
         ClusterId = cluster_id, \
-        CompanyName=company)
+        CompanyInfo=CompanyInfo,
+        title = title)
 
 
+@bp.route("/jasoRecommend", methods = ['POST'])
+def jasoRecommend():
+    recommendResults = []
+
+    if request.method == 'POST':
+        data = request.get_json()
+        recommendText = data['recommendText']
+
+        current_app.logger.warning(recommendText)
+
+    return jsonify(recommendResults = recommendResults)
+
+@bp.route("/jasoAwkFind", methods = ['POST'])
+def jasoAwkFind():
+    awkResults = []
+
+    if request.method == 'POST':
+        data = request.get_json()
+        AwkContent = data['AwkContent']
+
+        current_app.logger.warning(AwkContent)
+
+    return jsonify(awkResults = awkResults)
+
+@bp.route("/jasoWrite", methods = ['GET', 'POST'])
+def jasoWrite():
+    
+    return 
