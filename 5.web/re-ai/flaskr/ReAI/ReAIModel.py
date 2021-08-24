@@ -4,10 +4,10 @@ from transformers import TFElectraModel, TFGPT2LMHeadModel
 
 class ReAIModel:
     def __init__(self, 
-                 CLASSIFIER_MODEL_PATH='C:/Users/msi/GitHub/JasoseoAI_project/4.models/Classifierweights.h5',
+                 CLASSIFIER_MODEL_PATH='C:/Users/saeji/Desktop\My_Data/1.Github_repositories/JasoseoAI_project/4.models/Classifier/weights.h5',
                  BERT_MODEL_NAME='monologg/koelectra-base-v3-discriminator',
                  CLASSIFIER_MAX_SEQ_LEN=512,
-                 RECOMMEND_MODEL_PATH='C:/Users/msi/GitHub/JasoseoAI_project/4.models/Recommend/',
+                 RECOMMEND_MODEL_PATH='C:/Users/saeji/Desktop\My_Data/1.Github_repositories/JasoseoAI_project/4.models/Recommend/',
                  GPT_MODEL_NAME="taeminlee/kogpt2",
                  RECOMMEND_MAX_SEQ_LEN=100):
         

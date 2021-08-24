@@ -7,9 +7,9 @@ class ReAIModel:
                  CLASSIFIER_MODEL_PATH='4.models/Classifier/weights.h5',
                  BERT_MODEL_NAME='monologg/koelectra-base-v3-discriminator',
                  CLASSIFIER_MAX_SEQ_LEN=512,
-                 RECOMEND_MODEL_PATH='4.models/Recomend/',
+                 RECOMMEND_MODEL_PATH='4.models/Recommend/',
                  GPT_MODEL_NAME="taeminlee/kogpt2",
-                 RECOMEND_MAX_SEQ_LEN=40):
+                 RECOMMEND_MAX_SEQ_LEN=100):
         
         # 문장 분류 모델 변수 설정.
         self.BERT_MODEL_NAME = BERT_MODEL_NAME
@@ -25,11 +25,11 @@ class ReAIModel:
         
         # 문장 추천 모델 설정
         self.GPT_MODEL_NAME = GPT_MODEL_NAME
-        self.RECOMEND_MODEL_PATH = RECOMEND_MODEL_PATH # 모델 파일 경로
-        self.RECOMEND_MAX_SEQ_LEN = RECOMEND_MAX_SEQ_LEN
+        self.RECOMMEND_MODEL_PATH = RECOMMEND_MODEL_PATH # 모델 파일 경로
+        self.RECOMMEND_MAX_SEQ_LEN = RECOMMEND_MAX_SEQ_LEN
         # 문장 추천 모델 선언
-        self.RecomendModel = TFGPT2LMHeadModel.from_pretrained(self.RECOMEND_MODEL_PATH)
-        print("Complete Loding sentenceRecomend Model")
+        self.RecommendModel = TFGPT2LMHeadModel.from_pretrained(self.RECOMMEND_MODEL_PATH)
+        print("Complete Loding sentenceRecommend Model")
         
     def initial_classifierModel(self):
         # inputs 와 같은 shape의 array 생성
@@ -53,11 +53,12 @@ class ReAIModel:
             
         return result
     
-    def run_recomend(self, input_ids):
-        '''Run sentence recomend
+    def run_recommend(self, input_ids):
+        '''Run sentence recommend
         '''
-        output = self.RecomendModel.generate(input_ids=input_ids,
-                                             max_length=self.RECOMEND_MAX_SEQ_LEN,
+        max_length = len(input_ids) + self.RECOMMEND_MAX_SEQ_LEN
+        output = self.RecommendModel.generate(input_ids=input_ids,
+                                             max_length=max_length,
                                              pad_token_id=3,
                                              do_sample=True)
         

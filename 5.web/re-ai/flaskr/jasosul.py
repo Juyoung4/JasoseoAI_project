@@ -9,13 +9,13 @@ import logging
 
 from difflib import SequenceMatcher
 
-from .ReAI import ReAI
+from .ReAI.ReAI import ReAI
 
 # LOG : current_app.logger.warning()
 
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
 
-with open('C:/Users/msi/GitHub/JasoseoAI_project/4.web/re-ai/flaskr/Company/CompanyInfo.json', 'r', encoding='utf-8') as f:
+with open('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
 
 we = ReAI(generateNum=5)
@@ -136,6 +136,7 @@ def jasoAwkFind():
         data = request.get_json()
         AwkContent = data['AwkContent']
 
+        current_app.logger.warning('##############################################')
         current_app.logger.warning(AwkContent)
 
         strong, week = we.run_ClassifierModel(AwkContent)
