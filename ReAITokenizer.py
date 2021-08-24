@@ -4,18 +4,20 @@ class ReAITokenizer:
     def __init__(self, 
                  CLASSIFIER_MODEL_NAME='monologg/koelectra-base-v3-discriminator',
                  CLASSIFIER_MAX_SEQ_LENGTH = 512,
-                 RECOMEND_MODEL_NAME="taeminlee/kogpt2"):
+                 RECOMMEND_MODEL_NAME="taeminlee/kogpt2"):
         
         # classifier tokenizer setting
         self.CLASSIFIER_MODEL_NAME = CLASSIFIER_MODEL_NAME
         self.CLASSIFIER_MAX_SEQ_LENGTH = CLASSIFIER_MAX_SEQ_LENGTH
         # Call classifier tokenizer
         self.classifier_tokenizer = ElectraTokenizer.from_pretrained(self.CLASSIFIER_MODEL_NAME)
+        print("Complete Loding Classifier Model Tokenizer")
         
-        # Recomend tokenizer setting
-        self.RECOMEND_MODEL_NAME = RECOMEND_MODEL_NAME
-        # Call recomend tokenizer
-        self.recomend_tokenizer = PreTrainedTokenizerFast.from_pretrained(RECOMEND_MODEL_NAME)
+        # Recommend tokenizer setting
+        self.RECOMMEND_MODEL_NAME = RECOMMEND_MODEL_NAME
+        # Call recommend tokenizer
+        self.recommend_tokenizer = PreTrainedTokenizerFast.from_pretrained(RECOMMEND_MODEL_NAME)
+        print("Complete Loding Recommed Model Tokenizer")
         
         ##########
         #########
@@ -38,10 +40,10 @@ class ReAITokenizer:
         
         return predict_input
     
-    def recomend_encode(self, ModleInput):
-        '''Encoding for Sentence recomend Model input
+    def recommend_encode(self, ModleInput):
+        '''Encoding for Sentence recommend Model input
         '''
-        input_ids = self.recomend_tokenizer.encode(ModleInput, 
+        input_ids = self.recommend_tokenizer.encode(ModleInput, 
                                                    return_tensors='tf',
                                                    add_special_tokens=False)
     
@@ -55,8 +57,8 @@ class ReAITokenizer:
     def classifier_decode(self):
         pass
     
-    def recomend_decode(self, output_idx):
-        result = self.recomend_tokenizer.decode(output_idx)
+    def recommend_decode(self, output_idx):
+        result = self.recommend_tokenizer.decode(output_idx)
         result = result.replace('<s>','').replace('</s>','')
         
         return result
