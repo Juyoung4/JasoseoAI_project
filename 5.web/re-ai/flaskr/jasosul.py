@@ -9,12 +9,16 @@ import logging
 
 from difflib import SequenceMatcher
 
+from .ReAI import ReAI
+
 # LOG : current_app.logger.warning()
 
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
 
 with open('C:/Users/msi/GitHub/JasoseoAI_project/4.web/re-ai/flaskr/Company/CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
+
+we = ReAI(generateNum=5)
 
 @bp.route("/jasoList", methods = ['GET'])
 def jasoList():
@@ -117,6 +121,11 @@ def jasoRecommend():
 
         current_app.logger.warning(recommendText)
 
+        result = we.run_RecommendModel(recommendText)
+
+        for r in result:
+            current_app.logger.warning(r)
+
     return jsonify(recommendResults = recommendResults)
 
 @bp.route("/jasoAwkFind", methods = ['POST'])
@@ -126,6 +135,15 @@ def jasoAwkFind():
     if request.method == 'POST':
         data = request.get_json()
         AwkContent = data['AwkContent']
+
+        current_app.logger.warning(AwkContent)
+
+        strong, week = we.run_ClassifierModel(AwkContent)
+
+        for a, b in strong:
+            current_app.logger.warning(AwkContent[a:b])
+        for a, b in week:
+            current_app.logger.warning(AwkContent[a:b])
 
         current_app.logger.warning(AwkContent)
 
