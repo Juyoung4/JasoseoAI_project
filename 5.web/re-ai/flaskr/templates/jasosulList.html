@@ -2,38 +2,50 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-8">
+ 
+    <div class="col">
+      <br><br><br><br>
+      <h2 style="text-align:center"><b>😀{{username}}님의 자소서 목록😀</b></h2>
       <br><br>
-      <h1>게시글 목록</h1> 
-      <hr width = "100%" style="border: solid 2px">
+          <button type="button" style="float:right" class="btn btn-warning" onclick="location.href='writeSetting'">자소서 작성하기</button> 
+     
       <br><br>
-      {%if jasosuls %}
+      
       {% for jaso in jasosuls %}
       <article>
         <hr>
         <div class="row">
-          <div class="col">
-            <a class="h2" href="{{ url_for('jasosul.jasoContent', ClusterId=jaso.ClusterId, title=jaso.title, username=username)}}">{{ jaso.title }}</a>
-            <p class="text-justify">작성자 : {{ username }}</p>
-            <small class="text-muted">{{ jaso.create_at }}</small>
-          </div>
-
           <div class="col-md-2 d-flex flex-column">
             <img class="box mx-auto" src="{{ url_for('static', filename='company_imgs/'+jaso.company+'.png')}}" data-src="holder.js/64x64" width="75px" height="64px">
-            <p class="text-muted text-center">{{ jaso.company }}</p>
+            <span class="text-muted text-center">{{ jaso.company }}</span>
           </div>
+
+          <div class="col">
+            <br>
+            <a class="h2" href="{{ url_for('jasosul.jasoContent', ClusterId=jaso.ClusterId, title=jaso.title, username=username)}}">{{ jaso.title }}</a>
+           <!-- <p class="text-justify">작성자 : {{ username }}</p>-->
+            <span style="float:right;" id="date" class="text-muted">{{ jaso.create_at }}</span>
+            <script>
+              var date= $('#datehidden').val();
+               alert(date)
+              var time=date.split(" ");
+              var dateString="<span>";
+
+              for(var i=0;i<2;i++){
+                dateString+=time[i]+"<br>";
+              }
+              alert(dateString)
+                //document.getElementById("date").value = dateString;
+                var blk=document.getElementById("date");
+                blk.innerHTML=dateString;
+            </script>
+          </div>
+
+
       </article>
       {% endfor %}
-      {% else %}
-        <p class="text-justify">자기소개서가 존재하지 않습니다</p>
-      {% endif %}
     </div>
-
-    <aside class="col-md-4 my-3">
-      <button type="button" onclick="location.href='{{ url_for('jasosul.writeSetting')}}'">자소서 작성하기</button> 
-    </aside>
-  </div>
+  
 </div>
 {% endblock %}
 

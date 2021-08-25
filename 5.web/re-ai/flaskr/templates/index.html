@@ -1,13 +1,38 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<div class="container">
-    {% if username %}
-    <center>
-        <h1><img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px hspace=40">  {{username}}<a>님 안녕하세요!</a>  <img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px" hspace=40></h1>
-    </center>
-    {% else %}
-    <h1 class="logo">HOME 페이지</h1>
-    {% endif %}
-</div>
+<style>
+    #background {
+    height: 100vh;
+    width:100vw;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+  }
+    #main{
+    position:absolute;
+    top:40%;
+    left:50%;
+    margin:-150px 0px 0px -300px;
+    }
+</style>
+
+<body class="text-center">
+    <img id="background" src="{{ url_for('static', filename='profile_imgs/글쓰기.jpg')}}">
+      <div id="header"></div>
+      <div role="main" id="main" class="inner cover">
+        {% if username %}
+        <h3><img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px hspace=40"> <span style="color:white">{{username}}<a>님 안녕하세요!</a></span> <img class="rounded-circle mx-auto" src="{{ url_for('static', filename='profile_imgs/lion.jpg')}}" data-src="holder.js/64x64" width="100px" height="100px" hspace=40></h3>
+        {% endif %}
+            <h1 class="cover-heading" style="color:white">RE_AI</h1><br>
+        <p class="lead" style="color:white">AI 기술을 활용하여 자소서 작성부터 분석까지 도와주는 플랫폼입니다.<br>RE_AI에서 자소서를 완성시켜 보세요.</p>
+        <p class="lead">
+        {% if username %}
+            <a href= "{{ url_for('jasosul.writeSetting') }}"" class="btn btn-light">자소서 쓰러가기</a>
+        {% endif %}
+        </p>
+      </div>
+    </img>
+</body>
 {% endblock %}
