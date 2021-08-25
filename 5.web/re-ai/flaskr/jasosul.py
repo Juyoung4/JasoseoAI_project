@@ -9,16 +9,17 @@ import logging
 
 from difflib import SequenceMatcher
 
-from .ReAI.ReAI import ReAI
+#from .ReAI.ReAI import ReAI
 
 # LOG : current_app.logger.warning()
 
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
+# C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json
 
-with open('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
+with open('C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
 
-we = ReAI(generateNum=5)
+#we = ReAI(generateNum=5)
 
 @bp.route("/jasoList", methods = ['GET'])
 def jasoList():
@@ -121,10 +122,13 @@ def jasoRecommend():
 
         current_app.logger.warning(recommendText)
 
-        result = we.run_RecommendModel(recommendText)
+        #recommendResults = we.run_RecommendModel(recommendText)
 
-        for r in result:
-            current_app.logger.warning(r)
+        recommendResults = ['또한 교내 어학연수 프로그램을 통해 영어회화에 대한 자신감을, 토익을 통한 영어 관련 업무의 적응에도 어려움없이 해낼 거라 생각합니다.',\
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다']
 
     return jsonify(recommendResults = recommendResults)
 
@@ -139,14 +143,33 @@ def jasoAwkFind():
         current_app.logger.warning('##############################################')
         current_app.logger.warning(AwkContent)
 
-        strong, week = we.run_ClassifierModel(AwkContent)
+        #strong, weak = we.run_ClassifierModel(AwkContent)
 
-        for a, b in strong:
-            current_app.logger.warning(AwkContent[a:b])
-        for a, b in week:
-            current_app.logger.warning(AwkContent[a:b])
+        strong = [(55, 80), (120, 160)]
+        weak = [(30, 40)]
+        
+        total = []
+        for st in strong: # strong = 1, weak = 2
+            total.append([1, st[0], st[1]])
+        for wk in weak:
+            total.append([2, wk[0], wk[1]])
+        total = sorted(total, key=lambda x: x[1])
 
-        current_app.logger.warning(AwkContent)
+        for i in range(len(total)):
+            check, start, end = total[i]
+            if i == 0:
+                awkResults.append([0, AwkContent[:start]])
+                
+            else:
+                awkResults.append([0, AwkContent[total[i-1][2]:start]])
+            awkResults.append([check, AwkContent[start:end]])
+        
+        if total[-1][2] <= len(AwkContent)-1:
+            awkResults.append([0, AwkContent[total[-1][2]:]])
+
+        # for c in awkResults:
+        #     current_app.logger.warning(c[1]+"$$$$$$$$$$$$")
+
 
     return jsonify(awkResults = awkResults)
 

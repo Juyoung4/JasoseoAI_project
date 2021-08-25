@@ -48,6 +48,11 @@
                 </div>
             </div>
 
+            <ul class="list-group list-group-horizontal" >
+                <li style="display:none" id = "awkresult">어색한 문장 결과</li>
+                <li style="display:none" class="list-group-item" id="result"></li>
+            </ul>
+
             <!-- Button 1 작성 완료하기 -->
             <div class="form-group" style="float: right;">
                 <label class="col-md-12 control-label" for="finishbutton"></label>
@@ -71,10 +76,18 @@
                     <input id="ackwardbutton" name="ackwardbutton" class="btn btn-danger" type="button" value="어색한 문장" onclick="sendContent()">
                 </div>
             </div>
+
+            <!-- Button 4 어색한 문장 하이라이트 해제 -->
+            <div class="form-group" style="float: right;">
+                <label class="col-md-12 control-label" for="noackwardbutton"></label>
+                <div class="col-md-12">
+                    <input id="noackwardbutton" name="noackwardbutton" class="btn btn-secondary" type="button" value="어색한 문장 안보이게" >
+                </div>
+            </div>
         </fieldset>
     </form>
-    <div class="form-group">
-        <label class="col-md-12" for="DragPlace">선택한 문장(드래그해서 문장 선택) </label>
+    
+    <label class="col-md-12" for="DragPlace">선택한 문장(드래그해서 문장 선택) </label>
         <input id="DragTEXT" name="DragTEXT" type="text" class="form-control input-md"></input>
     
         <!-- 문장 추천 Button -->
@@ -82,13 +95,26 @@
         <div class="col-md-12">
             <button type="button" id="recommendbutton" name="recommendbutton" class="btn btn-warning" onclick="sendSentence()">문장추천</button>
         </div>
-    </div>
-    <div id="list"></div>
 
+        <!-- 문장 추천 결과-->
+        <ul class="list-group" id="recommendResult" name="recommendResult">
+        </ul>
 </div>
 {% endblock %}
 
 {% block scripts %}
+<script>
+    $('#noackwardbutton').click(function() {
+        $("#result").hide();
+        $("#awkresult").hide();
+    })
+    
+    $('#ackwardbutton').click(function() {
+        $("#result").show();
+        $("#awkresult").show();
+    })
+</script>
+
 <script type="text/javascript">
     function selectText() {
         var selectionText = "";
@@ -106,7 +132,7 @@
 </script>
 
 <script>
-    function sendSentence(){ //문장 보내기
+    function sendSentence(){ //문장 보내기 => 문장 추천
         var recommendText=$('#DragTEXT').val(); //입력문장
 
         var postdata = {
@@ -120,7 +146,16 @@
             dataType : 'JSON',
             contentType: "application/json",
             success: function(data){
-                alert('성공! 데이터 값:' + data.recommendResults)
+                var recommendResults = data.recommendResults;
+
+                var resultString = "<br>";
+                resultString += "<h5><strong>문장 추천 결과</strong></h5>"
+                $.each(recommendResults, function(i){
+                    resultString += '<li class="list-group-item">'+String(i+1)+". "+recommendResults[i]+'</li>'
+                });
+
+                $("#recommendResult").append(resultString);
+
             },
             error: function(request, status, error){
                 alert('ajax 통신 실패')
@@ -129,7 +164,7 @@
         })
     }
 
-    function sendContent(){ //문단 보내기
+    function sendContent(){ //문단 보내기 => 어색한 문장
         var content=$('#content').val(); //질문
         
         var postdata = {
@@ -142,7 +177,25 @@
             dataType : 'JSON',
             contentType: "application/json",
             success: function(data){
-                alert('성공! 데이터 값:' + data.result['content'])
+                var awkResults = data.awkResults;
+
+                var resultString="<p>";
+                $.each(awkResults, function(i){
+                    if (awkResults[i][0] == 1) {//strong
+                        resultString += "<mark style=\"background-color:#fcfca9;\">"+awkResults[i][1]+"</mark>";
+                    }
+                    else if(awkResults[i][0] == 2){//weak
+                        resultString += "<mark style=\"background-color:#fafad0;\">"+awkResults[i][1]+"</mark>";
+                    }
+                    else{
+                        resultString +=awkResults[i][1]
+                    }
+                });
+                resultString+="</p>";
+
+                var blk=document.getElementById("result");
+                blk.innerHTML=resultString;
+
             },
             error: function(request, status, error){
                 alert('ajax 통신 실패')
