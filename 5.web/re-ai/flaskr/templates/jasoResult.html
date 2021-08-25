@@ -22,22 +22,21 @@
         {% endfor %}
     </div>
     <br>
+
     <!-- 해당 회사 자소서 보여주기-->
     <h1 align="center"> <strong>{{companyName}}의 주요 키워드</strong></h1><br>
     <hr width = "100%" style="border: solid 2px"><br>
-    <table style="width:60%; margin:auto; text-align:center;">
-        <tr>
-            <td>
-                <img src="{{ url_for('static', filename='company_keywords/Treemap/'+companyName+'_Treemap.png')}}" width="700", height="700">
-            </td>
-            <td>
-                <img src="{{ url_for('static', filename='company_keywords/Pie/'+companyName+'_Pie.png')}}" width="700", height="700">
-            </td>
-        </tr>
-        <tr>
-            <img src="{{ url_for('static', filename='company_keywords/WordCloud/'+companyName+'_KeyWord.png')}}" width="650", height="550",style="width:60%; margin:auto; text-align:center">
-        </tr>
-    </table>
+    <div class="col-md-12">
+        <div style = "height:70% ; width:100% text-align:center;">
+            <img src="{{ url_for('static', filename='company_keywords/Pie/'+companyName+'_Pie.png')}}" width="100%", height="70%">
+        </div>
+        <div style = "height:100% ; width:100% text-align:center;">
+            <img src="{{ url_for('static', filename='company_keywords/Treemap/'+companyName+'_Treemap.png')}}"width="100%", height="70%">
+        </div>
+        <div style = "height:100% ; width:100% text-align:center;">
+            <img src="{{ url_for('static', filename='company_keywords/WordCloud/'+companyName+'_KeyWord.png')}}" width="100%", height="70%">
+        </div>
+    </div>
     <br>
 </div>
 {% endblock %}

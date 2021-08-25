@@ -2,7 +2,7 @@
 INSERT INTO users(id, username, passwd) 
 VALUES (null, 
         'test1',
-        'test1password1'
+        '1234'
 );
 
 
