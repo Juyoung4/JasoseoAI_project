@@ -10,15 +10,22 @@
                         <h2 class="card-title text-center" style="color:#113366;"><strong>회사 검색</strong></h2>
                     </div>         
                     <div class="card-body">
-                        <h5>😀 회사를 검색해주세요 </h5>
-                        <div class="col-md-12">
-                            <input type="text" id="searchCompany" name="searchCompany" style="display: inline-block" class="form-control" placeholder="회사 명" required autofocus> 
-                            <input id="searchButton" name="searchButton" class="btn btn-primary" type="submit" value="검색">
+                        <div class="row">
+                            <div class="col">
+                                <h5>😀 회사를 검색해주세요 </h5>
+                                <input type="text" id="searchCompany" name="searchCompany" style="display: inline-block" class="form-control col-sm-10" placeholder="회사 명" required autofocus> 
+                                <span>
+                                    <input id="searchButton" name="searchButton" class="btn btn-primary" style="position:relative; top:-4px;" type="submit"  value=" 검  색 ">
+                                </span>
+                            </div>
+
+                           <div class="col">
+                                <h5>😀 회사를 선택해주세요 </h5>
+                                <select class="form-control" id = "companyList" name="companyList">
+                                </select>
+                          </div>
                         </div>
-                        <br>
-                        <h5>😀 회사를 선택해주세요 </h5>
-                        <select class="form-control" id = "companyList" name="companyList">
-                        </select>
+                        <br><br>
                     </div>
                 </div>
                 <br><br>

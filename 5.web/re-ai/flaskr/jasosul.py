@@ -9,12 +9,17 @@ import logging
 
 from difflib import SequenceMatcher
 
+import gensim
+
 #from .ReAI.ReAI import ReAI
+
+Word2vecModel = gensim.models.Word2Vec.load('C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Word2vec\\ko_new3.bin')
 
 # LOG : current_app.logger.warning()
 
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
 # C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json
+# 'C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json'
 
 with open('C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
@@ -45,7 +50,9 @@ def jasoContent():
     title = request.args.get('title')
 
     user_id = userCheck(username)['id']
-    current_app.logger.warning(username + " "+str(ClusterId) + title)
+    companyName = CompanyLoad(ClusterId)['company']
+
+    current_app.logger.warning(username + " "+str(ClusterId) + companyName)
 
     # [2] 내용 가져오기
     allContents = jasoContentsLoad(user_id, ClusterId)
@@ -57,7 +64,7 @@ def jasoContent():
 
     return render_template("jasoResult.html", \
         username = username, ClusterId=ClusterId, title=title, \
-            allContents = allContents)
+            allContents = allContents, companyName=companyName)
 
 @bp.route("/writeSetting", methods = ['GET'])
 def writeSetting():
@@ -111,7 +118,6 @@ def ClusterCreate():
         CompanyInfo=CompanyInfo,
         title = title)
 
-
 @bp.route("/jasoRecommend", methods = ['POST'])
 def jasoRecommend():
     recommendResults = []
@@ -144,7 +150,6 @@ def jasoAwkFind():
         current_app.logger.warning(AwkContent)
 
         #strong, weak = we.run_ClassifierModel(AwkContent)
-
         strong = [(55, 80), (120, 160)]
         weak = [(30, 40)]
         
@@ -166,10 +171,6 @@ def jasoAwkFind():
         
         if total[-1][2] <= len(AwkContent)-1:
             awkResults.append([0, AwkContent[total[-1][2]:]])
-
-        # for c in awkResults:
-        #     current_app.logger.warning(c[1]+"$$$$$$$$$$$$")
-
 
     return jsonify(awkResults = awkResults)
 
@@ -196,4 +197,21 @@ def jasoWrite():
         if not result:
             return jsonify(status = False)
 
-    return jsonify(status = False) 
+    return jsonify(status = False)
+
+@bp.route("/WordRecommend", methods = ['POST'])
+def WordRecommend():
+    wordReList = []
+    if request.method == 'POST':
+        data = request.get_json()
+        word = data['recommendWord']
+
+        current_app.logger.warning("##############" +str(word))
+
+        # word2vec 돌리기
+        wordReList = [word[0] for word in Word2vecModel.wv.most_similar(word)]
+
+        if not wordReList:
+            return jsonify(status = False)
+
+    return jsonify(wordReList=wordReList)

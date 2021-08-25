@@ -4,7 +4,8 @@
 <div class="container">
     <br><br>
     <h1 align="center"> <strong>{{title}}</strong></h1>
-    <div style="float:right;">작성자 : {{username}}</div>
+    <div style="float:right;">작성자 : {{username}}</div><br>
+    <div style="float:right;">회사 명 : {{companyName}}</div>
     <br>
     <hr width = "100%" style="border: solid 2px"><br>
 
@@ -20,8 +21,23 @@
             <hr>
         {% endfor %}
     </div>
-
+    <br>
+    <!-- 해당 회사 자소서 보여주기-->
+    <h1 align="center"> <strong>{{companyName}}의 주요 키워드</strong></h1><br>
+    <hr width = "100%" style="border: solid 2px"><br>
+    <table style="width:60%; margin:auto; text-align:center;">
+        <tr>
+            <td>
+                <img src="{{ url_for('static', filename='company_keywords/Treemap/'+companyName+'_Treemap.png')}}" width="700", height="700">
+            </td>
+            <td>
+                <img src="{{ url_for('static', filename='company_keywords/Pie/'+companyName+'_Pie.png')}}" width="700", height="700">
+            </td>
+        </tr>
+        <tr>
+            <img src="{{ url_for('static', filename='company_keywords/WordCloud/'+companyName+'_KeyWord.png')}}" width="650", height="550" style="width:60%; margin:auto; text-align:center;">
+        </tr>
+    </table>
+    <br>
 </div>
-
-
 {% endblock %}

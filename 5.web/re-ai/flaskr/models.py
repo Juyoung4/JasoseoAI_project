@@ -29,6 +29,9 @@ def logins(username, passwd):
 def userCheck(username):
     return query_db("SELECT id FROM users WHERE username = ?", [username], one=True)
 
+def CompanyLoad(ClusterId):
+    return query_db("SELECT company FROM clusters WHERE id = ?", [ClusterId], one=True)
+
 def jasoClusterCreate(userId, title, company):
     return insert_db("INSERT INTO clusters (writer_id, title, company) values (?, ?, ?)", \
         [userId, title, company])

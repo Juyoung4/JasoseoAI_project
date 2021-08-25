@@ -86,31 +86,25 @@
                             <input id="noackwardbutton" name="noackwardbutton" class="btn btn-secondary" type="button" value="어색한 문장 안보이게" >
                         </div>
                     </div>
-
-
                 </fieldset>
             </form>
             
-            <br>
-            <hr width = "100%"><br>
-            
             <label class="col-md-12" for="DragPlace">선택한 문장(드래그해서 문장 선택) </label>
-            <input id="DragTEXT" name="DragTEXT" type="text" style="display: inline-block" class="form-control col-sm-10"></input>
+                <input id="DragTEXT" name="DragTEXT" type="text" class="form-control input-md"></input>
             
                 <!-- 문장 추천 Button -->
                 <span> 
-                    <button type="button" id="recommendbutton" name="recommendbutton" style="float:right" class="btn btn-warning" onclick="sendSentence()">다음 문장 추천</button>
+                    <button type="button" id="recommendbutton" name="recommendbutton" class="btn btn-warning" onclick="sendSentence()">문장추천</button>
                 </span>
 
                 <!-- 문장 추천 결과-->
                 <ul class="list-group" id="recommendResult" name="recommendResult">
                 </ul>
-            <br><br>
-            
+            <br>
         </div>
         <!--유사 단어-->
-        <div class="col-md-2" style="margin-top: 350px; margin-bottom: 200px; ">
-            <span><b>유사 단어 검색</b></span> 
+        <div class="col-md-2" style="margin-top: 330px; margin-bottom: 200px; ">
+            <span><b>유사 단어 검색</b>  </span> 
             <div class="row">
                 <span class=" col-sm-7">
                     <input type="text" id="searchWord" name="searchWord" style="display: inline-block" class="form-control" placeholder="단어" required autofocus> 
