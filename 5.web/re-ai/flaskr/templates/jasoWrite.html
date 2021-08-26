@@ -1,21 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<style>
-    #loading-mask {
-        position: absolute;
-        top:655px;
-        left:120px;
-        opacity: 0.80;
-        filter: alpha(opacity=80);
-        z-index: 30000;
-        height: 100px;
-        width:100px;
-        display: none;
-        background: url(C:\Users\msi\GitHub\JasoseoAI_project\5.web\re-ai\flaskr\static\profile_imgs\loading2.gif);
-        background-size: 70;
-        background-color: red;
-  }
+<style type="text/css" >
+    .wrap-loading div{ /*로딩 이미지*/
+        position: fixed;
+        top:50%;
+        left:50%;
+        margin-left: -21px;
+        margin-top: -21px;
+    }
+    .display-none{ /*감추기*/
+        display:none;
+    }
 </style>
 
 <div class="container-fluid">
@@ -119,7 +115,10 @@
                     <button type="button" id="recommendbutton" name="recommendbutton" style="float:right" class="btn btn-warning" onclick="sendSentence()">다음 문장 추천</button>
                 </span>
 
-                <div class="col-md-12" id="loading-mask"></div>
+                <!-- loading 위치 -->
+                <div class="wrap-loading display-none">
+                    <div><img src="{{ url_for('static', filename='profile_imgs/loading.gif')}}" /></div>
+                </div>
 
                 <!-- 문장 추천 결과-->
                 <ul class="list-group" id="recommendResult" name="recommendResult">
@@ -240,6 +239,12 @@
                 $("#recommendResult").append(resultString);
 
             },
+            beforeSend:function(){
+                $('.wrap-loading').removeClass('display-none');
+            },
+            complete:function(){
+                $('.wrap-loading').addClass('display-none');
+            },
             error: function(request, status, error){
                 alert('ajax 통신 실패')
                 alert(error);
@@ -279,12 +284,6 @@
                 var blk=document.getElementById("result");
                 blk.innerHTML=resultString;
 
-            },
-            beforeSend:function(){
-                jQuery("#loading-mask").show();
-            },
-            complete:function(){
-                jQuery("#loading-mask").fadeOut();
             },
             error: function(request, status, error){
                 alert('ajax 통신 실패')
