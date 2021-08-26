@@ -173,7 +173,12 @@
             success: function(data){
                 var recommendResults = data.recommendResults;
 
+                if ($('#recommendResult').length) {
+                    $("#recommendResult").empty();
+                }
+                
                 var resultString = "<br>";
+                
                 resultString += "<h5><strong>문장 추천 결과</strong></h5>"
                 $.each(recommendResults, function(i){
                     resultString += '<li class="list-group-item">'+String(i+1)+". "+recommendResults[i]+'</li>'

@@ -1,5 +1,6 @@
 import functools, json
 
+# set FLASK_APP=C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\re-ai\\flaskr
 from flask import Blueprint, flash, g, redirect, render_template, \
     request, session, url_for, jsonify, current_app
 
@@ -11,9 +12,9 @@ from difflib import SequenceMatcher
 
 import gensim
 
-#from .ReAI.ReAI import ReAI
+from .ReAI.ReAI import ReAI
 
-Word2vecModel = gensim.models.Word2Vec.load('C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Word2vec\\ko_new3.bin')
+Word2vecModel = gensim.models.Word2Vec.load('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Word2vec\\ko_new3.bin')
 
 # LOG : current_app.logger.warning()
 
@@ -21,10 +22,10 @@ bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
 # C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json
 # 'C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json'
 
-with open('C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
+with open('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
 
-#we = ReAI(generateNum=5)
+we = ReAI(generateNum=5)
 
 @bp.route("/jasoList", methods = ['GET'])
 def jasoList():
@@ -128,13 +129,13 @@ def jasoRecommend():
 
         current_app.logger.warning(recommendText)
 
-        #recommendResults = we.run_RecommendModel(recommendText)
+        recommendResults = we.run_RecommendModel(recommendText)
 
-        recommendResults = ['또한 교내 어학연수 프로그램을 통해 영어회화에 대한 자신감을, 토익을 통한 영어 관련 업무의 적응에도 어려움없이 해낼 거라 생각합니다.',\
-            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다']
+        # recommendResults = ['또한 교내 어학연수 프로그램을 통해 영어회화에 대한 자신감을, 토익을 통한 영어 관련 업무의 적응에도 어려움없이 해낼 거라 생각합니다.',\
+        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다']
 
     return jsonify(recommendResults = recommendResults)
 
@@ -149,11 +150,12 @@ def jasoAwkFind():
         current_app.logger.warning('##############################################')
         current_app.logger.warning(AwkContent)
 
-        #strong, weak = we.run_ClassifierModel(AwkContent)
-        strong = [(55, 80), (120, 160)]
-        weak = [(30, 40)]
+        strong, weak = we.run_ClassifierModel(AwkContent)
+        # strong = [(55, 80), (120, 160)]
+        # weak = [(30, 40)]
         
         total = []
+        
         for st in strong: # strong = 1, weak = 2
             total.append([1, st[0], st[1]])
         for wk in weak:
@@ -169,7 +171,7 @@ def jasoAwkFind():
                 awkResults.append([0, AwkContent[total[i-1][2]:start]])
             awkResults.append([check, AwkContent[start:end]])
         
-        if total[-1][2] <= len(AwkContent)-1:
+        if total and total[-1][2] <= len(AwkContent)-1:
             awkResults.append([0, AwkContent[total[-1][2]:]])
 
     return jsonify(awkResults = awkResults)
