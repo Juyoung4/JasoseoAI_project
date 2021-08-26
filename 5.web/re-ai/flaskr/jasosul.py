@@ -12,20 +12,21 @@ from difflib import SequenceMatcher
 
 import gensim
 
-from .ReAI.ReAI import ReAI
+#from .ReAI.ReAI import ReAI
 
-Word2vecModel = gensim.models.Word2Vec.load('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Word2vec\\ko_new3.bin')
+path1 = "C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\"
+path2 = "C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\"
+
+Word2vecModel = gensim.models.Word2Vec.load(path1+'Word2vec\\ko_new3.bin')
 
 # LOG : current_app.logger.warning()
 
 bp = Blueprint("jasosul", __name__, url_prefix = '/jasosul')
-# C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json
-# 'C:\\Users\\msi\\GitHub\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json'
 
-with open('C:\\Users\\saeji\\Desktop\\My_Data\\1.Github_repositories\\JasoseoAI_project\\5.web\\re-ai\\flaskr\\Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
+with open(path1+'Company\\CompanyInfo.json', 'r', encoding='utf-8') as f:
     CompanyInfos = json.load(f)
 
-we = ReAI(generateNum=5)
+#we = ReAI(generateNum=5)
 
 @bp.route("/jasoList", methods = ['GET'])
 def jasoList():
@@ -57,11 +58,6 @@ def jasoContent():
 
     # [2] 내용 가져오기
     allContents = jasoContentsLoad(user_id, ClusterId)
-
-    # current_app.logger.warning(str(allContents[0]['idx']) + " " + \
-    #     str(allContents[0]['Contentid']) + " " + \
-    #         allContents[0]['question'] + " " +\
-    #             allContents[0]['content'] + " ")
 
     return render_template("jasoResult.html", \
         username = username, ClusterId=ClusterId, title=title, \
@@ -117,7 +113,8 @@ def ClusterCreate():
     return render_template("jasoWrite.html", username=username, \
         ClusterId = cluster_id, \
         CompanyInfo=CompanyInfo,
-        title = title)
+        title = title,
+        companyName=company)
 
 @bp.route("/jasoRecommend", methods = ['POST'])
 def jasoRecommend():
@@ -129,13 +126,13 @@ def jasoRecommend():
 
         current_app.logger.warning(recommendText)
 
-        recommendResults = we.run_RecommendModel(recommendText)
+        #recommendResults = we.run_RecommendModel(recommendText)
 
-        # recommendResults = ['또한 교내 어학연수 프로그램을 통해 영어회화에 대한 자신감을, 토익을 통한 영어 관련 업무의 적응에도 어려움없이 해낼 거라 생각합니다.',\
-        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
-        #     '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다']
+        recommendResults = ['또한 교내 어학연수 프로그램을 통해 영어회화에 대한 자신감을, 토익을 통한 영어 관련 업무의 적응에도 어려움없이 해낼 거라 생각합니다.',\
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다',
+            '쉽게 적응하리라 생각합니다. 아르바이트가 나태하고 힘들었던 저는 도망가고 싶었습니다']
 
     return jsonify(recommendResults = recommendResults)
 
@@ -150,9 +147,9 @@ def jasoAwkFind():
         current_app.logger.warning('##############################################')
         current_app.logger.warning(AwkContent)
 
-        strong, weak = we.run_ClassifierModel(AwkContent)
-        # strong = [(55, 80), (120, 160)]
-        # weak = [(30, 40)]
+        #strong, weak = we.run_ClassifierModel(AwkContent)
+        strong = [(55, 80), (120, 160)]
+        weak = [(30, 40)]
         
         total = []
         

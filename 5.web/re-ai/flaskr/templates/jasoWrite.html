@@ -1,6 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<style>
+    #loading-mask {
+        position: absolute;
+        top:655px;
+        left:120px;
+        opacity: 0.80;
+        filter: alpha(opacity=80);
+        z-index: 30000;
+        height: 100px;
+        width:100px;
+        display: none;
+        background: url(C:\Users\msi\GitHub\JasoseoAI_project\5.web\re-ai\flaskr\static\profile_imgs\loading2.gif);
+        background-size: 70;
+        background-color: red;
+  }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9" style="margin-left:50px;">
@@ -102,11 +119,33 @@
                     <button type="button" id="recommendbutton" name="recommendbutton" style="float:right" class="btn btn-warning" onclick="sendSentence()">다음 문장 추천</button>
                 </span>
 
+                <div class="col-md-12" id="loading-mask"></div>
+
                 <!-- 문장 추천 결과-->
                 <ul class="list-group" id="recommendResult" name="recommendResult">
                 </ul>
             <br><br>
+            <hr width = "100%" style="border: solid 2px"><br>
             
+            <button type="button" id="displayCompany" name="displayCompany" style=" align-items: center;" class="btn btn-primary btn-lg" onclick="display()">회재 인재상 확인하기</button>
+            <div id="showCompany" style="display:none">
+                <!-- 해당 회사 자소서 보여주기-->
+                <h1 align="center"> <strong>{{companyName}}의 주요 키워드</strong></h1><br>
+                <hr width = "100%"><br>
+                <div class="col-md-12">
+                    <div style = "height:70% ; width:100% text-align:center;">
+                        <img src="{{ url_for('static', filename='company_keywords/Pie/'+companyName+'_Pie.png')}}" width="100%", height="70%">
+                    </div>
+                    <div style = "height:100% ; width:100% text-align:center;">
+                        <img src="{{ url_for('static', filename='company_keywords/Treemap/'+companyName+'_Treemap.png')}}"width="100%", height="70%">
+                    </div>
+                    <div style = "height:100% ; width:100% text-align:center;">
+                        <img src="{{ url_for('static', filename='company_keywords/WordCloud/'+companyName+'_KeyWord.png')}}" width="100%", height="70%">
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <br><br><br>
         </div>
         <!--유사 단어-->
         <div class="col-md-2" style="margin-top: 350px; margin-bottom: 200px; ">
@@ -128,6 +167,17 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    function display(){
+        if($('#showCompany').css('display') == 'none'){
+        $('#showCompany').show();
+        }else{
+            $('#showCompany').hide();
+        }
+    }
+</script>
+
 <script>
     $('#noackwardbutton').click(function() {
         $("#result").hide();
@@ -172,6 +222,9 @@
             contentType: "application/json",
             success: function(data){
                 var recommendResults = data.recommendResults;
+                if ($('#recommendResult').length) {
+                    $("#recommendResult").empty();
+                }
 
                 if ($('#recommendResult').length) {
                     $("#recommendResult").empty();
@@ -226,6 +279,12 @@
                 var blk=document.getElementById("result");
                 blk.innerHTML=resultString;
 
+            },
+            beforeSend:function(){
+                jQuery("#loading-mask").show();
+            },
+            complete:function(){
+                jQuery("#loading-mask").fadeOut();
             },
             error: function(request, status, error){
                 alert('ajax 통신 실패')
