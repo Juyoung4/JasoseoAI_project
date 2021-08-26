@@ -4,6 +4,7 @@
 # web 
 instance
 company_keywords
+Word2vec
 
 # Model
 *.h5
