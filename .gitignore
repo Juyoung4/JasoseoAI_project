@@ -12,6 +12,7 @@ Word2vec
 # Model
 *.h5
 bert_ckpt
+gpt_ckpt
 
 # Database
 *.sqlite
