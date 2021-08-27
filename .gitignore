@@ -1,5 +1,8 @@
-#jupyter checkpoint directory
+# checkpoint, cache directory
+# jupyter checkpoint files
 *.ipynb_checkpoints
+# python cache files
+__pycache__
 
 # web 
 instance
@@ -12,3 +15,9 @@ bert_ckpt
 
 # Database
 *.sqlite
+
+# backup directory
+*backup
+
+# vscode setting foloder
+*.vscode
