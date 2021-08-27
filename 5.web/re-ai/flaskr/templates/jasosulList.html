@@ -10,7 +10,7 @@
           <button type="button" style="float:right" class="btn btn-warning" onclick="location.href='writeSetting'">자소서 작성하기</button> 
      
       <br><br>
-      
+      {% if jasosuls %}
       {% for jaso in jasosuls %}
       <article>
         <hr>
@@ -40,12 +40,14 @@
                 blk.innerHTML=dateString;
             </script>
           </div>
-
-
       </article>
       {% endfor %}
+      {% else %}
+        <hr></hr>
+        <h5>자기소개서가 존재하지 않습니다</h5><br>
+        <hr></hr>
+      {% endif %}
     </div>
-  
 </div>
 {% endblock %}
 
